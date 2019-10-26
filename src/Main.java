@@ -59,8 +59,8 @@ public class Main {
 		cust_th2.start();
 		cust_th3.start();
 		cust_th4.start();
-		
-		//Joining customer threads
+
+		// Joining customer threads
 		try {
 			cust_th0.join();
 		} catch (InterruptedException e) {

@@ -27,7 +27,7 @@ public class BankTeller implements Runnable {
 				Main.cust_ready_teller.acquire();
 			} catch (InterruptedException e) {
 			}
-			
+
 			try {
 				Main.queue_mutex.acquire();
 			} catch (InterruptedException e) {
@@ -35,7 +35,7 @@ public class BankTeller implements Runnable {
 			Customer cur_cust = Main.teller_line.remove();
 			System.out.println("Teller " + threadNum + " begins serving customer " + cur_cust.getThreadNum());
 			Main.queue_mutex.release();
-			
+
 			switch (cur_cust.getChoice()) {
 			// Deposit
 			case 1:

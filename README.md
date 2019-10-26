@@ -10,3 +10,4 @@ A bank is simulated by using threads and semaphores to model customer and employ
     ```
     java -jar proj2.jar
     ```
+NOTE: Java 1.8 is required to run this program.

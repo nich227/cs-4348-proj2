@@ -73,16 +73,16 @@ public class Customer implements Runnable {
 
 		while (numTimesVisited < 3) {
 
-			// Randomly choose amount to change balance
-			int min = 0;
-			int max = 4;
-			this.amt_change = amt_change_choices[rand_gen.nextInt(max) + min];
-
 			// Randomly choose to deposit or withdraw or loan
-			min = 1;
-			max = 3;
+			int min = 1;
+			int max = 3;
 
 			this.choice = rand_gen.nextInt(max) + min;
+
+			// Randomly choose amount to change balance
+			min = 0;
+			max = 4;
+			this.amt_change = amt_change_choices[rand_gen.nextInt(max) + min];
 
 			// Requires the use of a teller
 			if (choice == 1 || choice == 2) {

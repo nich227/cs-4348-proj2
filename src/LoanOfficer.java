@@ -34,7 +34,7 @@ public class LoanOfficer implements Runnable {
 			Customer cur_cust = Main.loan_line.remove();
 			System.out.println("Customer " + cur_cust.getThreadNum() + " gets loan from loan officer");
 			Main.queue_mutex.release();
-			
+
 			// Process loan time
 			try {
 				Thread.sleep(400);
@@ -44,9 +44,7 @@ public class LoanOfficer implements Runnable {
 			// Enforce mutual exclusive access to loan amount
 			try {
 				Main.access_loan_amt.acquire();
-			} catch (InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			} catch (InterruptedException e) {
 			}
 
 			cur_cust.setLoanBal(cur_cust.getLoanBal() + cur_cust.getAmtChange());
