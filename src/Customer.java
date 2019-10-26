@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * Each customer will make 3 visits to the bank. Each customer starts with a
  * balance of $1000. On each visit a customer is randomly assigned one of the
@@ -67,22 +69,25 @@ public class Customer implements Runnable {
 		System.out.println("Customer " + threadNum + " created");
 
 		int[] amt_change_choices = { 100, 200, 300, 400, 500 };
+		
+		Random rand_gen = new Random(System.currentTimeMillis());
 
 		while (numTimesVisited < 3) {
 
 			// Randomly choose amount to change balance
 			int min = 0;
 			int max = 4;
-			this.amt_change = amt_change_choices[(int) (Math.random() * ((max - min) + 1)) + min];
+			this.amt_change = amt_change_choices[rand_gen.nextInt(max) + min];
 
 			// Randomly choose to deposit or withdraw or loan
 			min = 1;
 			max = 3;
 
-			this.choice = (int) (Math.random() * ((max - min) + 1)) + min;
+			this.choice = rand_gen.nextInt(max) + min;
 
 			// Requires the use of a teller
 			if (choice == 1 || choice == 2) {
+				System.out.println("\n--Teller--");
 				// Wait for a teller to be ready
 				try {
 					Main.teller_ready.acquire();
@@ -105,6 +110,7 @@ public class Customer implements Runnable {
 
 			// Requires the use of a loaner
 			if (choice == 3) {
+				System.out.println("\n--Loaner--");
 				// Wait for the loaner to be ready
 				try {
 					Main.loan_ready.acquire();
