@@ -21,6 +21,7 @@ public class Customer implements Runnable {
 	private int choice;
 
 	private int amt_change;
+	Random rand_gen = new Random();
 
 	// Accessors
 	public int getBalance() {
@@ -69,8 +70,6 @@ public class Customer implements Runnable {
 		System.out.println("Customer " + threadNum + " created");
 
 		int[] amt_change_choices = { 100, 200, 300, 400, 500 };
-		
-		Random rand_gen = new Random(System.currentTimeMillis());
 
 		while (numTimesVisited < 3) {
 
@@ -87,47 +86,62 @@ public class Customer implements Runnable {
 
 			// Requires the use of a teller
 			if (choice == 1 || choice == 2) {
-				System.out.println("\n--Teller--");
 				// Wait for a teller to be ready
 				try {
 					Main.teller_ready.acquire();
 				} catch (InterruptedException e) {
 				}
+
 				// Request deposit or request withdrawal time
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e1) {
+				} catch (InterruptedException e) {
 				}
 
 				// Add customer to teller line
+				try {
+					Main.queue_mutex.acquire();
+				} catch (InterruptedException e) {
+				}
+
 				Main.teller_line.add(this);
 				Main.cust_ready_teller.release();
+
+				Main.queue_mutex.release();
+
 				try {
-					Main.teller_finished.acquire();
+					Main.teller_finished[threadNum].acquire();
 				} catch (InterruptedException e) {
 				}
 			}
 
 			// Requires the use of a loaner
 			if (choice == 3) {
-				System.out.println("\n--Loaner--");
 				// Wait for the loaner to be ready
 				try {
 					Main.loan_ready.acquire();
 				} catch (InterruptedException e) {
-
 				}
+
 				// Request loan time
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e1) {
+				} catch (InterruptedException e) {
 				}
 
 				// Add customer to loan line
+				try {
+					Main.queue_mutex.acquire();
+				} catch (InterruptedException e) {
+				}
+
 				Main.loan_line.add(this);
 				Main.cust_ready_loan.release();
+
+				Main.queue_mutex.release();
+
 				try {
-					Main.loan_finished.acquire();
+					Main.loan_finished[threadNum].acquire();
 				} catch (InterruptedException e) {
 				}
 			}
